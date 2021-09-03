@@ -1,5 +1,5 @@
 const initialState = {
-    user:null
+    user: JSON.parse(localStorage.getItem('user'))
 }
 
 const actionTypes = {
@@ -14,6 +14,7 @@ const setUser = user => ({
 const authReducer = (state, action)=>{
     switch(action.type){
         case actionTypes.SET_USER:
+            localStorage.setItem('user',JSON.stringify(action.user))
             return ({
                 ...state,
                 user:action.user
