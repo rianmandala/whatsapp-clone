@@ -32,6 +32,15 @@
 .chat__body{
     padding: 30px 20px;
     flex: 1;
+    overflow-y: scroll;
+}
+
+.chat__body::-webkit-scrollbar{
+    width: 6px;
+}
+
+.chat__body::-webkit-scrollbar-thumb{
+    background-color: lightgray;
 }
 
 .chat__message-container{

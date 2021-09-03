@@ -4,8 +4,25 @@ import { useEffect } from 'react'
 import { db } from '../../utils/firebase'
 import './SidebarChat.css'
 import firebase from 'firebase'
+import { useParams } from 'react-router-dom'
 
-function SidebarChat({addNewChat, name}) {
+function SidebarChat({addNewChat, name, idGroup}) {
+    const [chats, setChats] = useState([])
+
+    useEffect(_=>{
+        if(idGroup){
+            const chatUnsubscribe = db.collection('groups').doc(idGroup).collection('chats').orderBy('timestamp','asc').onSnapshot(snapshot=>{
+                setChats(snapshot.docs.map(chat=>({
+                    id: chat.id,
+                    data: chat.data()
+                })))
+                console.log(chats)
+            })
+            return ()=>{
+                chatUnsubscribe()
+            }
+        }
+    },[])
 
     const createChat = ()=>{
         const roomName = prompt("Please enter name for room chat")
@@ -22,7 +39,7 @@ function SidebarChat({addNewChat, name}) {
             {name && <Avatar src={`https://avatars.dicebear.com/api/human/${name}.svg`} />}
             <div className="sidebar-chat__info">
                 <h2>{name}</h2>
-                <p>Last message ...</p>
+                <p>{chats.length>0 && chats[chats.length-1]?.data.message}</p>
             </div>
         </div>
     ):(
